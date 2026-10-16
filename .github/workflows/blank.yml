@@ -1,0 +1,33 @@
+// vm.c - Código base simplificado para uma Máquina Virtual LC-3
+#include <stdio.h>
+#include <stdint.h>
+#include <signal.h>
+
+// Registradores da CPU Virtual
+enum { R_R0 = 0, R_R1, R_R2, R_R3, R_R4, R_R5, R_R6, R_R7, R_PC, R_COND, R_COUNT };
+uint16_t reg[R_COUNT];
+
+// Memória de 65536 posições (64KB)
+uint16_t memory[UINT16_MAX];
+
+int main(int argc, const char* argv[]) {
+    // Configura o Program Counter (PC) para o endereço inicial padrão
+    reg[R_PC] = 0x3000;
+    
+    printf("PC Virtual inicializado com sucesso!\n");
+    
+    int running = 1;
+    while (running) {
+        // Ciclo de Busca, Decodificação e Execução (Fetch, Decode, Execute)
+        uint16_t instr = memory[reg[R_PC]++];
+        uint16_t op = instr >> 12;
+        
+        // Exemplo de interrupção para parar o loop (simplificado)
+        if (op == 0) { 
+            running = 0; 
+        }
+    }
+    
+    return 0;
+}
+gcc -O3 vm.c -o pc_virtual
